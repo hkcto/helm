@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminer-deployment
+spec:
+  replicas: {{.Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: adminer
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name}}
+    spec:
+      containers:
+        - name: adminer
+          image: adminer:{{ .Values.image.tag}}
+          ports:
+            - containerPort: {{ .Values.service.port}}
