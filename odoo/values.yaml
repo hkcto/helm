@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: odoo
+  tag: latest
+
+containerPort: 8069
+
+env:
+ host: postgresql-service
+ name: odoo
+ password: odoo-20230328
+ db: odoo
+
+service:
+  type: NodePort
