@@ -1,0 +1,6 @@
+containers:
+  email: hkcto.com@gmail.com
+  password: "PG-20230328"
+
+service:
+  type: NodePort
