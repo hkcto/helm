@@ -1,0 +1,11 @@
+image:
+  tag: latest
+  ports: 5432
+
+env:
+  pguser: pgadmin
+  pgpassword: PG-20230328  
+  timezone: Asia/Hong_Kong
+
+values:
+  pvc: ""
