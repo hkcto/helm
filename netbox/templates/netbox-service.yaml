@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: netbox-service
+spec:
+  selector:
+    app: netbox
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000  # 指定NodePort的值，可以根據需要更改
+  type: NodePort  # 將服務類型改為NodePort
