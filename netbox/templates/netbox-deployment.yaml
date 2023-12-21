@@ -13,74 +13,73 @@ spec:
         app: netbox
     spec:
       containers:
-        - name: netbox
-          image: docker.io/netboxcommunity/netbox:3.6
-          env:
-            - name: CORS_ORIGIN_ALLOW_ALL
-              value: "True"
-            - name: DB_HOST
-              value: postgres
-            - name: DB_NAME
-              value: netbox
-            - name: DB_PASSWORD
-              value: J5brHrAXFLQSif0K
-            - name: DB_USER
-              value: netbox
-            - name: EMAIL_FROM
-              value: netbox@bar.com
-            - name: EMAIL_PASSWORD
-              value: ""
-            - name: EMAIL_PORT
-              value: "25"
-            - name: EMAIL_SERVER
-              value: localhost
-            - name: EMAIL_SSL_CERTFILE
-              value: ""
-            - name: EMAIL_SSL_KEYFILE
-              value: ""
-            - name: EMAIL_TIMEOUT
-              value: "5"
-            - name: EMAIL_USERNAME
-              value: netbox
-            - name: EMAIL_USE_SSL
-              value: "false"
-            - name: EMAIL_USE_TLS
-              value: "false"
-            - name: GRAPHQL_ENABLED
-              value: "true"
-            - name: HOUSEKEEPING_INTERVAL
-              value: "86400"
-            - name: MEDIA_ROOT
-              value: /opt/netbox/netbox/media
-            - name: METRICS_ENABLED
-              value: "false"
-            - name: REDIS_CACHE_DATABASE
-              value: "1"
-            - name: REDIS_CACHE_HOST
-              value: redis-cache
-            - name: REDIS_CACHE_INSECURE_SKIP_TLS_VERIFY
-              value: "false"
-            - name: REDIS_CACHE_PASSWORD
-              value: t4Ph722qJ5QHeQ1qfu36
-            - name: REDIS_CACHE_SSL
-              value: "false"
-            - name: REDIS_DATABASE
-              value: "0"
-            - name: REDIS_HOST
-              value: redis
-            - name: REDIS_INSECURE_SKIP_TLS_VERIFY
-              value: "false"
-            - name: REDIS_PASSWORD
-              value: H733Kdjndks81
-            - name: REDIS_SSL
-              value: "false"
-            - name: RELEASE_CHECK_URL
-              value: https://api.github.com/repos/netbox-community/netbox/releases
-            - name: SECRET_KEY
-              value: 'r(m)9nLGnz$(_q3N4z1k(EFsMCjjjzx08x9VhNVcfd%6RF#r!6DE@+V5Zk2X'
-            - name: SKIP_SUPERUSER
-              value: "true"
-            - name: WEBHOOKS_ENABLED
-              value: "true"
-          ports:
-            - containerPort: 8080
+      - name: netbox
+        image: docker.io/netboxcommunity/netbox:v3.6-2.7.0
+        envFrom:
+        - configMapRef:
+            name: netbox-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: docker.io/postgres:15-alpine
+        envFrom:
+        - configMapRef:
+            name: postgres-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: docker.io/redis:7-alpine
+        command: ["sh", "-c", "redis-server --appendonly yes --requirepass $REDIS_PASSWORD"]
+        envFrom:
+        - configMapRef:
+            name: redis-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-cache-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-cache
+  template:
+    metadata:
+      labels:
+        app: redis-cache
+    spec:
+      containers:
+      - name: redis-cache
+        image: docker.io/redis:7-alpine
+        command: ["sh", "-c", "redis-server --requirepass $REDIS_PASSWORD"]
+        envFrom:
+        - configMapRef:
+            name: redis-cache-config

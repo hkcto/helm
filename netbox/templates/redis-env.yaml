@@ -1,0 +1,8 @@
+apiVersion: v1
+metadata:
+  creationTimestamp: null
+  name: redis-config
+data:
+  REDIS_PASSWORD: H733Kdjndks81
+kind: ConfigMap
+
