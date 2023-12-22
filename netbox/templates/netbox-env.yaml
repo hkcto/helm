@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: netbox-config
+  name: netbox-env-helm
 data:
   CORS_ORIGIN_ALLOW_ALL: "True"
   DB_HOST: postgres-service

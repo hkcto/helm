@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: netbox-deployment
+  name: {{ .Release.Name }}-helm
 spec:
   replicas: 1
   selector:
@@ -12,33 +12,35 @@ spec:
       labels:
         app: netbox
     spec:
+      volumes:
+        - name: config-volume
+          persistentVolumeClaim:
+            claimName: config-helm
+        - name: media-volume
+          persistentVolumeClaim:
+            claimName: media-helm
+        - name: reports-volume
+          persistentVolumeClaim:
+            claimName: reports-helm
+        - name: scripts-volume
+          persistentVolumeClaim:
+            claimName: scripts-helm
       containers:
-      - name: netbox
-        image: docker.io/netboxcommunity/netbox:v3.6-2.7.0
-        envFrom:
-        - configMapRef:
-            name: netbox-config
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: postgres-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres
-  template:
-    metadata:
-      labels:
-        app: postgres
-    spec:
-      containers:
-      - name: postgres
-        image: docker.io/postgres:15-alpine
-        envFrom:
-        - configMapRef:
-            name: postgres-config
+        - name: netbox
+          image: docker.io/netboxcommunity/netbox:v3.6-2.7.0
+          envFrom:
+            - configMapRef:
+                name: netbox-env-helm
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/netbox/config
+            - name: media-volume
+              mountPath: /opt/netbox/netbox/media
+            - name: reports-volume
+              mountPath: /opt/netbox/netbox/reports
+            - name: scripts-volume
+              mountPath: /opt/netbox/netbox/scripts
+
 ---
 apiVersion: apps/v1
 kind: Deployment

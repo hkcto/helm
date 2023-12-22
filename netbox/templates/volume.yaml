@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: netbox-config-helm-nfs-ztl
+spec:
+  capacity:
+    storage: 300Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /volume1/k8s/netbox/config
+    server: 192.168.80.4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: netbox-media-helm-nfs-ztl
+spec:
+  capacity:
+    storage: 300Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /volume1/k8s/netbox/media
+    server: 192.168.80.4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: netbox-reports-helm-nfs-ztl
+spec:
+  capacity:
+    storage: 300Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /volume1/k8s/netbox/reports
+    server: 192.168.80.4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: netbox-scripts-helm-nfs-ztl
+spec:
+  capacity:
+    storage: 300Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /volume1/k8s/netbox/scripts
+    server: 192.168.80.4
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config-helm
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: ""
+  volumeName: netbox-config-helm-nfs-ztl
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-helm
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi
+  storageClassName: ""
+  volumeName: netbox-media-helm-nfs-ztl
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: reports-helm
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""
+  volumeName: netbox-reports-helm-nfs-ztl
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: scripts-helm
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""
+  volumeName: netbox-scripts-helm-nfs-ztl
