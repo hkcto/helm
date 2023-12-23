@@ -1,0 +1,17 @@
+{{- define "iscsi-pv-template" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  capacity:
+    storage: {{ .Values.storage }}
+  accessModes:
+    - ReadWriteOnce
+  iscsi:
+    targetPortal: {{ .Values.iscsi.targetPortal }}
+    iqn: {{ .Values.iscsi.iqn }}
+    lun: {{ .Values.iscsi.lun }}
+    fsType: {{ .Values.iscsi.fsType }}
+    readOnly: false
+{{- end }}

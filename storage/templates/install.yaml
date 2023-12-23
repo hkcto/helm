@@ -1,0 +1,6 @@
+# templates/install.yaml
+
+{{- $yamlFile := .Values.installYAML }}
+
+#{{ include $yamlFile . }}
+{{ include "iscsi-pv-template" . }}

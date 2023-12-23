@@ -7,5 +7,5 @@ env:
   pgpassword: PG-20230328  
   timezone: Asia/Hong_Kong
 
-values:
+volumes:
   pvc: ""
